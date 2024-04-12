@@ -68,6 +68,6 @@ jobs:
           subscriptionId: ${{ secrets.TAIL_NonProd_SubscriptionID }}
           #resourceGroupName: ${{ "rgn-n-zeaus-rgnoccint-poc-rg" }}
           resourceGroupName: ${{ env.AZURE_RESOURCEGROUP_NAME }}
-          template: ./eahubops-talon/flifoaa/function_app/main.bicep
+          template: eahubops-talon/flifoaa/function_app/main.bicep
           #parameters: ./eahubops-talon/flifoaa/function_app/parameters.json
           failOnStdErr: false
