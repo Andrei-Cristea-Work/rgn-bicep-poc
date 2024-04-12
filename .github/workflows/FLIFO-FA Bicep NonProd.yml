@@ -47,7 +47,7 @@ jobs:
       - run: |
           echo Working Dir ${{ github.workspace }}
           pwd
-          lt -lta
+          ls -lta
           cd ..
           pwd
           ls -lta
