@@ -43,7 +43,10 @@ jobs:
           #path: repo
       - run: |
           echo Working Dir ${{ github.workspace }}
-          echo ls
+          cd ..
+          ls
+          
+          
           echo $GITHUB_WORKSPACE
           
       - name: Log into Azure
