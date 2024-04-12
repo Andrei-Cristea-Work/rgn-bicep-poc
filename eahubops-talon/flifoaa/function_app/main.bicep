@@ -1,7 +1,6 @@
 //param stopped bool
 //param debug bool
 
-
 var env = substring(resourceGroup().name, 4, 1)
 var region = substring(resourceGroup().name, 7, 4)
 
