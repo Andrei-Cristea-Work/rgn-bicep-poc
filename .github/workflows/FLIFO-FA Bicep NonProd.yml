@@ -42,7 +42,10 @@ jobs:
       - uses: actions/checkout@main
         #with:
           #path: repo
-
+      - run: |
+          echo ${{ github.workspace }}
+          echo $GITHUB_WORKSPACE
+          
       - name: Log into Azure
         uses: azure/login@v1
         with:
