@@ -73,12 +73,13 @@ jobs:
     # SERVICE BUS
     # =====================
     - name: Deploy Service Bus Bicep
-      uses: azure/arm-deploy@v1
+      uses: azure/arm-deploy@v1 #https://github.com/Azure/arm-deploy
       with:
         subscriptionId: ${{ secrets.TAIL_NonProd_SubscriptionID }}
         resourceGroupName: ${{ env.AZURE_SERVICE_BUS_RG }}
         template: eahubops-talon/service_bus/main.bicep
         failOnStdErr: false
+        deploymentName: gh-service-bus
           
   Deploy_FLIFO_Function:
     # The type of runner that the job will run on
@@ -110,10 +111,11 @@ jobs:
     # FLIFO
     # =====================
     - name: Deploy FLIFO Function Bicep
-      uses: azure/arm-deploy@v1
+      uses: azure/arm-deploy@v1 #https://github.com/Azure/arm-deploy
       with:
         subscriptionId: ${{ secrets.TAIL_NonProd_SubscriptionID }}
         resourceGroupName: ${{ env.AZURE_FLIFO_FUNCTION_RG }}
         template: eahubops-talon/flifoaa/function_app/main.bicep
         #parameters: ./eahubops-talon/flifoaa/function_app/parameters.json
         failOnStdErr: false
+        deploymentName: gh-flifo-func
