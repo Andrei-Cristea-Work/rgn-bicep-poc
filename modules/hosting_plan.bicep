@@ -11,8 +11,8 @@ param planZoneRedundant bool
 // VARIABLES
 // --------------------------------------------------------------------------------------------------------
 
-var env = substring(resourceGroup().name, 4, 1)
-var region = substring(resourceGroup().name, 7, 4)
+//var env = substring(resourceGroup().name, 4, 1)
+//var region = substring(resourceGroup().name, 7, 4)
 
 // --------------------------------------------------------------------------------------------------------
 // RESOURCES
