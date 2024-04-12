@@ -26,6 +26,8 @@ jobs:
   # REPO AND AZURE AUTH
   # =====================
   Repo_Azure_Auth:
+    name: Download Repo and Authenticate to Azure
+    
     # The type of runner that the job will run on
     runs-on: ubuntu-latest
     environment: 'NonProd'
@@ -51,6 +53,11 @@ jobs:
   # SERVICE BUS
   # =====================
   Service_Bus:
+    name: Deploy Service Bus Bicep Infra
+    
+    # requires Tower job to complete first
+    needs: Repo_Azure_Auth
+    
     # The type of runner that the job will run on
     runs-on: ubuntu-latest
     environment: 'NonProd'
@@ -70,6 +77,11 @@ jobs:
   # FLIFO
   # =====================
   FLIFO_Function:
+    name: Deploy AA FLIFO Function Bicep Infra
+    
+    # requires Tower job to complete first
+    needs: Service_Bus
+    
     # The type of runner that the job will run on
     runs-on: ubuntu-latest
     environment: 'NonProd'
