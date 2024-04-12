@@ -7,8 +7,14 @@ on:
   # Triggers the workflow on push or pull request events but only for the "main" branch
   push:
     branches: [ "nonprod" ]
+    paths:
+    - 'eahuops-talon/flifoaa/function_app/**'
+    - '.github/workflows/FLIFO-FA Bicep NonProd.yaml'
   pull_request:
     branches: [ "nonpord" ]
+    paths:
+    - 'eahuops-talon/flifoaa/function_app/**'
+    - '.github/workflows/FLIFO-FA Bicep NonProd.yaml'
 
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
