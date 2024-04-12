@@ -8,12 +8,12 @@ on:
   push:
     branches: [ "main" ]
     paths:
-    - 'eahuops-talon/flifoaa/function_app/**'
+    - 'eahubops-talon/flifoaa/function_app/**'
     - '.github/workflows/FLIFO-FA Bicep NonProd.yaml'
   pull_request:
     branches: [ "main" ]
     paths:
-    - 'eahuops-talon/flifoaa/function_app/**'
+    - 'eahubops-talon/flifoaa/function_app/**'
     - '.github/workflows/FLIFO-FA Bicep NonProd.yaml'
 
   # Allows you to run this workflow manually from the Actions tab
