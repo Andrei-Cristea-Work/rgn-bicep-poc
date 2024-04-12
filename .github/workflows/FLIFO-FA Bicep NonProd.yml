@@ -6,12 +6,12 @@ name: FLIFO-FA Bicep NonProd
 on:
   # Triggers the workflow on push or pull request events but only for the "main" branch
   push:
-    branches: [ "nonprod" ]
+    branches: [ "main" ]
     paths:
     - 'eahuops-talon/flifoaa/function_app/**'
     - '.github/workflows/FLIFO-FA Bicep NonProd.yaml'
   pull_request:
-    branches: [ "nonpord" ]
+    branches: [ "main" ]
     paths:
     - 'eahuops-talon/flifoaa/function_app/**'
     - '.github/workflows/FLIFO-FA Bicep NonProd.yaml'
@@ -20,48 +20,71 @@ on:
   workflow_dispatch:
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
+
 jobs:
-  # This workflow contains a single job called "build"
-  Deploy_Bicep:
+  # =====================
+  # REPO AND AZURE AUTH
+  # =====================
+  Repo_Azure_Auth:
+    # The type of runner that the job will run on
+    runs-on: ubuntu-latest
+    environment: 'NonProd'
+    
+    steps:
+    # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+    - uses: actions/checkout@v3 # Checks out the repository
+      #with:
+        #path: repo
+    - run: |
+        echo Working Dir ${{ github.workspace }}
+        pwd
+        ls -lta
+        cd ..
+        pwd
+        ls -lta
+    - name: Log into Azure
+      uses: azure/login@v1
+      with:
+        creds: ${{ secrets.TAIL_NonProd }}
+        
+  # =====================
+  # SERVICE BUS
+  # =====================
+  Service_Bus:
+    # The type of runner that the job will run on
+    runs-on: ubuntu-latest
+    environment: 'NonProd'
+    env:
+      AZURE_RESOURCEGROUP_NAME: rgn-n-zeaus-rgnoccint-poc-rg
+      
+    steps:
+      - name: Deploy Bicep
+        uses: azure/arm-deploy@v1
+        with:
+          subscriptionId: ${{ secrets.TAIL_NonProd_SubscriptionID }}
+          resourceGroupName: ${{ env.AZURE_RESOURCEGROUP_NAME }}
+          template: eahubops-talon/flifoaa/service_bus/main.bicep
+          failOnStdErr: false
+          
+  # =====================
+  # FLIFO
+  # =====================
+  FLIFO_Function:
     # The type of runner that the job will run on
     runs-on: ubuntu-latest
     environment: 'NonProd'
     #defaults:
       #run:
         #working-directory: ./eahubops-talon/flifoaa/function_app
-
     env:
-      # retrieve SP credentials from GitHub Secrets, to authenticate with to Azure
-      #ARM_CLIENT_ID: ${{secrets.AZURE_SP_NONPROD_CLIENT_ID}}
-      #ARM_CLIENT_SECRET: ${{secrets.AZURE_SP_NONPROD_CLIENT_SECRET}}
-      #ARM_TENANT_ID: ${{secrets.AZURE_SP_NONPROD_TENANT_ID}}
-      #ARM_SUBSCRIPTION_ID: ${{secrets.AZURE_SP_NONPROD_SUBSCRIPTION_ID}}
       AZURE_RESOURCEGROUP_NAME: rgn-n-zeaus-rgnoccint-poc-rg
     
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
-      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
-      - uses: actions/checkout@v3 # Checks out the repository
-        #with:
-          #path: repo
-      - run: |
-          echo Working Dir ${{ github.workspace }}
-          pwd
-          ls -lta
-          cd ..
-          pwd
-          ls -lta
-          
-      - name: Log into Azure
-        uses: azure/login@v1
-        with:
-          creds: ${{ secrets.TAIL_NonProd }}
-          
-      - name: Deploy Bicep file
+      - name: Deploy Bicep
         uses: azure/arm-deploy@v1
         with:
           subscriptionId: ${{ secrets.TAIL_NonProd_SubscriptionID }}
-          #resourceGroupName: ${{ "rgn-n-zeaus-rgnoccint-poc-rg" }}
           resourceGroupName: ${{ env.AZURE_RESOURCEGROUP_NAME }}
           template: eahubops-talon/flifoaa/function_app/main.bicep
           #parameters: ./eahubops-talon/flifoaa/function_app/parameters.json
