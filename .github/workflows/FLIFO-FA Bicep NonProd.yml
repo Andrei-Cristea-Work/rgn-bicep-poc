@@ -44,6 +44,7 @@ jobs:
       - run: |
           echo Working Dir ${{ github.workspace }}
           pwd
+          cd ..
           ls -lta
           cd eahubops-talon
           pwd
