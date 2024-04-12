@@ -9,14 +9,12 @@ on:
     branches: [ "main" ]
     paths:
     - 'eahubops-talon/flifoaa/function_app/**'
-    - 'eahubops-talon/flifoaa/service_bus/**'
-    - '.github/workflows/FLIFO-FA Bicep NonProd.yml'
+    - '.github/workflows/FLIFO-FA Bicep NonProd.yaml'
   pull_request:
     branches: [ "main" ]
     paths:
     - 'eahubops-talon/flifoaa/function_app/**'
-    - 'eahubops-talon/flifoaa/service_bus/**'
-    - '.github/workflows/FLIFO-FA Bicep NonProd.yml'
+    - '.github/workflows/FLIFO-FA Bicep NonProd.yaml'
 
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
