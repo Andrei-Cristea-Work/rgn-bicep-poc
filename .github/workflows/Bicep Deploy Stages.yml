@@ -1,6 +1,6 @@
 # This is a basic workflow to help you get started with Actions
 
-name: FLIFO-FA Bicep NonProd
+name: Bicep - Deploy Stages
 
 # Controls when the workflow will run
 on:
@@ -9,12 +9,14 @@ on:
     branches: [ "main" ]
     paths:
     - 'eahubops-talon/flifoaa/function_app/**'
-    - '.github/workflows/FLIFO-FA Bicep NonProd.yaml'
+    - 'eahubops-talon/flifoaa/service_bus/**'
+    - '.github/workflows/Bicep - Deploy Stages.yml'
   pull_request:
     branches: [ "main" ]
     paths:
     - 'eahubops-talon/flifoaa/function_app/**'
-    - '.github/workflows/FLIFO-FA Bicep NonProd.yaml'
+    - 'eahubops-talon/flifoaa/service_bus/**'
+    - '.github/workflows/Bicep - Deploy Stagess.yml'
 
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
@@ -22,27 +24,39 @@ on:
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 
 jobs:
+  changes-run-check:
+    runs-on: ubuntu-latest
+    outputs:
+      sbus: ${{ steps.changes.outputs.sbus }}
+      func: ${{ steps.changes.outputs.func }}
+    steps:
+    - uses: actions/checkout@v3
+    - uses: dorny/paths-filter@v2
+      id: changes
+      with:
+        filters: |
+          sbus:
+            - 'eahubops-talon/flifoaa/service_bus/**'
+          func:
+            - 'eahubops-talon/flifoaa/function_app/**'
+
   # =====================
-  # REPO AND AZURE AUTH
+  # Deploy Infra
   # =====================
-  Deploy_Bicep_Infra:
-    #name: 
-    
-    # requires X job to complete first
-    #needs: 
-    
+  Deploy_Service_Bus:
     # The type of runner that the job will run on
     runs-on: ubuntu-latest
     environment: 'NonProd'
     env:
       AZURE_SERVICE_BUS_RG: rgn-n-zeaus-rgnoccint-poc-rg
-      AZURE_FLIFO_FUNCTION_RG: rgn-n-zeaus-rgnoccint-poc-rg
     
+    # Wait from the paths-filter to be completed before starting next-job
+    needs: changes-run-check
+    if: ${{ needs.changes-run-check.outputs.sbus == 'true' }}
+
     steps:
     # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
     - uses: actions/checkout@v3 # Checks out the repository
-      #with:
-        #path: repo
     - run: |
         echo Working Dir ${{ github.workspace }}
         pwd
@@ -66,6 +80,32 @@ jobs:
         template: eahubops-talon/service_bus/main.bicep
         failOnStdErr: false
           
+  Deploy_FLIFO_Function:
+    # The type of runner that the job will run on
+    runs-on: ubuntu-latest
+    environment: 'NonProd'
+    env:
+      AZURE_FLIFO_FUNCTION_RG: rgn-n-zeaus-rgnoccint-poc-rg
+    
+    # Wait from the paths-filter to be completed before starting next-job
+    needs: changes-run-check
+    if: ${{ needs.changes-run-check.outputs.func == 'true' }}
+
+    steps:
+    # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+    - uses: actions/checkout@v3 # Checks out the repository
+    - run: |
+        echo Working Dir ${{ github.workspace }}
+        pwd
+        ls -lta
+        cd ..
+        pwd
+        ls -lta
+    - name: Log into Azure
+      uses: azure/login@v1
+      with:
+        creds: ${{ secrets.TAIL_NonProd }}
+        
     # =====================
     # FLIFO
     # =====================
