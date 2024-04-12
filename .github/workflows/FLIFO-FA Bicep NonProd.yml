@@ -38,7 +38,8 @@ jobs:
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
-      - uses: actions/checkout@v3
+      #- uses: actions/checkout@v3
+      - uses: actions/checkout@main
         #with:
           #path: repo
 
@@ -53,6 +54,6 @@ jobs:
           subscriptionId: ${{ secrets.TAIL_NonProd_SubscriptionID }}
           #resourceGroupName: ${{ "rgn-n-zeaus-rgnoccint-poc-rg" }}
           resourceGroupName: ${{ env.AZURE_RESOURCEGROUP_NAME }}
-          template: eahubops-talon/flifoaa/function_app/main.bicep
+          template: ./eahubops-talon/flifoaa/function_app/main.bicep
           #parameters: ./eahubops-talon/flifoaa/function_app/parameters.json
           failOnStdErr: false
