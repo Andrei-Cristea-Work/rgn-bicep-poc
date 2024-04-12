@@ -63,7 +63,7 @@ jobs:
       with:
         subscriptionId: ${{ secrets.TAIL_NonProd_SubscriptionID }}
         resourceGroupName: ${{ env.AZURE_SERVICE_BUS_RG }}
-        template: eahubops-talon/flifoaa/service_bus/main.bicep
+        template: eahubops-talon/service_bus/main.bicep
         failOnStdErr: false
           
     # =====================
