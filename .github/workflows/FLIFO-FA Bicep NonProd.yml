@@ -44,9 +44,14 @@ jobs:
       - run: |
           echo Working Dir ${{ github.workspace }}
           pwd
-          cd ..
+          ls -lta
+          cd eahubops-talon
           pwd
-          ls -lt
+          cd flifoaa
+          pwd
+          cd function_app
+          pwd
+          ls
           
       - name: Log into Azure
         uses: azure/login@v1
